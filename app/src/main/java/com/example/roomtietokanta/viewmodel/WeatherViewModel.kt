@@ -1,9 +1,12 @@
 package com.example.roomtietokanta.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomtietokanta.data.model.WeatherEntity
 import com.example.roomtietokanta.data.repository.WeatherRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +27,7 @@ class WeatherViewModel(
     private val apiFetcher: suspend (String) -> WeatherEntity
 ) : ViewModel() {
 
+    private var fetchJob: Job? = null
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState
 
@@ -59,8 +63,15 @@ class WeatherViewModel(
 
         _uiState.value = _uiState.value.copy(isLoading = true, error = null)
 
-        viewModelScope.launch {
+
+        fetchJob?.cancel()
+
+        fetchJob = viewModelScope.launch {
             repository.getWeather(city).collectLatest { cached ->
+
+                Log.d("WeatherDebug", "Fetching: $city")
+                Log.d("WeatherDebug", "Displaying: ${cached?.city}")
+
                 val now = System.currentTimeMillis()
                 val thirtyMinutes = 30 * 60 * 1000
                 // If the data is in Room and it was fetched less than 30 min ago,
