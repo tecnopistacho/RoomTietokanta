@@ -86,6 +86,6 @@ Näin sovellus toimii tehokkaammin ja API-kutsuja tehdään vähemmän 🚀
 
 ## 🎥 Demo Video
 
-[Viikko 6 Demo Video - Sää + Room](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+[Viikko 6 Demo Video - Sää + Room](https://www.youtube.com/watch?v=3A4RhK2uZoY)
 
 
